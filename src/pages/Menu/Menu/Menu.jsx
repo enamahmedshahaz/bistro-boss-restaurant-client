@@ -1,11 +1,25 @@
 import { Helmet } from 'react-helmet-async';
 import Cover from '../../Shared/Cover/Cover';
 
-import coverImg1 from "../../../assets/menu/banner3.jpg"
-import PopularMenu from "../../Home/PopularMenu/PopularMenu";
+import pageCoverImg from "../../../assets/menu/banner3.jpg"
+import SectionTitle from '../../../components/SectionTitle/SectionTitle';
+import MenuCategory from '../MenuCategory/MenuCategory';
+import useMenu from "../../../hooks/useMenu";
 
+import dessertCoverImg from "../../../assets/menu/dessert-bg.jpeg"
+import pizzaCoverImg from "../../../assets/menu/pizza-bg.jpg"
+import saladCoverImg from "../../../assets/menu/salad-bg.jpg"
+import soupCoverImg from "../../../assets/menu/soup-bg.jpg"
 
 const Menu = () => {
+
+    const [menu] = useMenu();
+    const offeredItems = menu.filter(item => item.category === 'offered');
+    const dessertItems = menu.filter(item => item.category === 'dessert');
+    const pizzaItems = menu.filter(item => item.category === 'pizza');
+    const saladItems = menu.filter(item => item.category === 'salad');
+    const soupItems = menu.filter(item => item.category === 'soup');
+
     return (
         <div>
             <Helmet>
@@ -13,28 +27,48 @@ const Menu = () => {
             </Helmet>
 
             <Cover
-                image={coverImg1}
+                image={pageCoverImg}
                 title={"Menu"}
                 description={"Would you like to try a dish?"}
             ></Cover>
 
-            <PopularMenu></PopularMenu>
+            <SectionTitle
+                heading="Don't Miss"
+                subHeading="Today's Offer"
+            >
+            </SectionTitle>
 
-            <Cover
-                image={coverImg1}
-                title={"Menu"}
-                description={"Would you like to try a dish?"}
-            ></Cover>
+            <MenuCategory
+                items={offeredItems}
+            ></MenuCategory>
 
-            <PopularMenu></PopularMenu>
+            <MenuCategory
+                coverImg={dessertCoverImg}
+                coverTitle={"Desserts"}
+                coverDesc={"Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."}
+                items={dessertItems}
+            ></MenuCategory>
 
-            <Cover
-                image={coverImg1}
-                title={"Menu"}
-                description={"Would you like to try a dish?"}
-            ></Cover>
+            <MenuCategory
+                coverImg={pizzaCoverImg}
+                coverTitle={"Pizzas"}
+                coverDesc={"Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."}
+                items={pizzaItems}
+            ></MenuCategory>
 
-            <PopularMenu></PopularMenu>
+            <MenuCategory
+                coverImg={saladCoverImg}
+                coverTitle={"Salads"}
+                coverDesc={"Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."}
+                items={saladItems}
+            ></MenuCategory>
+
+            <MenuCategory
+                coverImg={soupCoverImg}
+                coverTitle={"Soups"}
+                coverDesc={"Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."}
+                items={soupItems}
+            ></MenuCategory>
 
         </div>
     );
