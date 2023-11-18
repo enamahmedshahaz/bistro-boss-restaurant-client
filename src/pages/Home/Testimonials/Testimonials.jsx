@@ -42,7 +42,7 @@ const Testimonials = () => {
                         </div>
                     </SwiperSlide>)}
             </Swiper>
-            
+
         </section>
     );
 };
