@@ -43,7 +43,6 @@ const Testimonials = () => {
                     </SwiperSlide>)}
             </Swiper>
 
-            
         </section>
     );
 };
