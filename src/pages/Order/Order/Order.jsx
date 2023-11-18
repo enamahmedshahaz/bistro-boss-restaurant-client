@@ -1,12 +1,13 @@
 import { Helmet } from "react-helmet-async";
-import Cover from "../Shared/Cover/Cover";
+import Cover from "../../Shared/Cover/Cover";
 
-import orderCoverImg from "../../assets/shop/banner2.jpg";
+import orderCoverImg from "../../../assets/shop/banner2.jpg";
 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { useState } from "react";
-import useMenu from "../../hooks/useMenu";
+import useMenu from "../../../hooks/useMenu";
+import TabItems from "../TabItems/TabItems";
 
 const Order = () => {
 
@@ -14,11 +15,12 @@ const Order = () => {
 
     const [menu] = useMenu();
     
-    const offeredItems = menu.filter(item => item.category === 'offered');
-    const dessertItems = menu.filter(item => item.category === 'dessert');
-    const pizzaItems = menu.filter(item => item.category === 'pizza');
     const saladItems = menu.filter(item => item.category === 'salad');
+    const pizzaItems = menu.filter(item => item.category === 'pizza');
     const soupItems = menu.filter(item => item.category === 'soup');
+    const dessertItems = menu.filter(item => item.category === 'dessert');
+    const drinksItems = menu.filter(item => item.category === 'drinks');
+
 
     return (
         <div>
@@ -43,23 +45,23 @@ const Order = () => {
                 </TabList>
 
                 <TabPanel>
-                    <h2>Salad: {tabIndex}</h2>
+                    <TabItems items={saladItems}></TabItems>
                 </TabPanel>
 
                 <TabPanel>
-                    <h2>Pizza: {tabIndex}</h2>
+                    <TabItems items={pizzaItems}></TabItems>
                 </TabPanel>
 
                 <TabPanel>
-                    <h2>Soup: {tabIndex}</h2>
+                    <TabItems items={soupItems}></TabItems>
                 </TabPanel>
 
                 <TabPanel>
-                    <h2>Dessert: {tabIndex}</h2>
+                    <TabItems items={dessertItems}></TabItems>
                 </TabPanel>
 
                 <TabPanel>
-                    <h2>Drinks: {tabIndex}</h2>
+                    <TabItems items={drinksItems}></TabItems>
                 </TabPanel>
 
             </Tabs>
