@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useContext } from "react";
 import { AuthContext } from '../../providers/AuthProvider';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 
 const Register = () => {

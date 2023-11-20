@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import {
     loadCaptchaEnginge,
     LoadCanvasTemplate,
@@ -6,32 +6,78 @@ import {
     validateCaptcha
 } from 'react-simple-captcha';
 
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
+import { AuthContext } from '../../providers/AuthProvider';
 
-
+import Swal from 'sweetalert2';
 
 const Login = () => {
 
-    const captchaRef = useRef();
+    // const captchaRef = useRef();
     const [disabled, setDisabled] = useState(true);
 
+    const { signInUser } = useContext(AuthContext);
+
+    const location = useLocation();
+    // console.log('Location in login: ', location);
+    const navigate = useNavigate();
+
+
     useEffect(() => {
-        loadCaptchaEnginge(6, 'white', 'black');
+        loadCaptchaEnginge(6);
     }, [])
 
     const handleSignIn = (event) => {
+
         event.preventDefault();
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
 
         console.log(email, password);
+
+        signInUser(email, password)
+            .then(result => {
+                console.log(result.user);
+
+                // clear all input values in the form
+                event.target.reset();
+
+                //if comes from a private route navigate to that route, 
+                // else navigate to home page after successful login
+                navigate(location?.state ?
+                    location.state : '/'
+                );
+
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Login successful",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+            })
+            .catch(error => {
+                console.log(error);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: error.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+            })
     }
 
 
-    const handleValidateCaptcha = () => {
-        const captchaText = captchaRef.current.value;
+    const handleValidateCaptcha = (event) => {
+        //  const captchaText = captchaRef.current.value;
+        const captchaText = event.target.value;
+
+        console.log(captchaText);
 
         if (validateCaptcha(captchaText)) {
             setDisabled(false);
@@ -83,8 +129,10 @@ const Login = () => {
                                 <label className="label">
                                     <LoadCanvasTemplate />
                                 </label>
-                                <input ref={captchaRef} name="userCaptchaInput" type="text" placeholder="Enter above captcha text" className="input input-bordered" required />
-                                <input onClick={handleValidateCaptcha} className="btn btn-outline btn-sm mt-3" value="Validate" />
+                                <input onBlur={handleValidateCaptcha} name="userCaptchaInput" type="text" placeholder="Enter above captcha text" className="input input-bordered" required />
+
+                                {/* <input ref={captchaRef} name="userCaptchaInput" type="text" placeholder="Enter above captcha text" className="input input-bordered" required /> */}
+                                {/* <input onClick={handleValidateCaptcha} className="btn btn-outline btn-sm mt-3" value="Validate" /> */}
 
                             </div>
 
