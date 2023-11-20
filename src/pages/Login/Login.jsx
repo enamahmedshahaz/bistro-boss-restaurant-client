@@ -2,9 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import {
     loadCaptchaEnginge,
     LoadCanvasTemplate,
-    LoadCanvasTemplateNoReload,
+    // LoadCanvasTemplateNoReload,
     validateCaptcha
 } from 'react-simple-captcha';
+
+import { Link } from "react-router-dom";
+
 
 
 const Login = () => {
@@ -31,7 +34,7 @@ const Login = () => {
 
         if (validateCaptcha(captchaText)) {
             setDisabled(false);
-        }else{
+        } else {
             setDisabled(true);
         }
     }
@@ -68,7 +71,7 @@ const Login = () => {
                             <label className="label">
                                 <LoadCanvasTemplate />
                             </label>
-                            <input  ref={captchaRef} name="userCaptchaInput" type="text" placeholder="Enter above captcha text" className="input input-bordered" required />
+                            <input ref={captchaRef} name="userCaptchaInput" type="text" placeholder="Enter above captcha text" className="input input-bordered" required />
                             <input onClick={handleValidateCaptcha} className="btn btn-outline btn-sm mt-3" value="Validate" />
 
                         </div>
@@ -77,6 +80,11 @@ const Login = () => {
                             <input disabled={disabled} className="btn btn-primary" type="submit" value="Sign In" />
                         </div>
                     </form>
+
+                    <div className="card-body text-center -mt-10">
+                        <p>New Here? Please  <Link className='font-bold text-blue-700' to="/register">Register</Link> </p>
+                    </div>
+
                 </div>
             </div>
         </div>
