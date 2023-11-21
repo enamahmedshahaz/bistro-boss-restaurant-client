@@ -1,8 +1,10 @@
-
+import useAuth from "../../hooks/useAuth";
 
 const FoodCard = ({ item }) => {
 
     const { name, image, price, recipe } = item;
+
+    const { user } = useAuth();
 
     const handleAddToCart = (food) => {
         console.log('Add to cart:', food);
