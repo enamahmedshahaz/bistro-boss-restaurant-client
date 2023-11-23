@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import Swal from 'sweetalert2';
 import { FaCartShopping } from "react-icons/fa6";
+import useCart from "../../../hooks/useCart";
 
 const Navbar = () => {
 
     const { user, signOutUser } = useContext(AuthContext);
+    const [cart] = useCart();
 
     const handleLogout = () => {
         signOutUser()
@@ -19,7 +21,7 @@ const Navbar = () => {
                     timer: 1500
                 });
             })
-            .catch(error => {
+            .catch( error => {
                 Swal.fire({
                     position: "top-end",
                     icon: "error",
@@ -44,10 +46,12 @@ const Navbar = () => {
                 <><li> <Link to="/login">Login</Link> </li></>
         }
 
-        <li> <Link to="#">
-        <FaCartShopping />
-            <div className="badge badge-secondary">+0</div>
-        </Link> </li>
+        <li>
+            <Link to="">
+                    <FaCartShopping className="text-2xl"/>
+                    <div className="badge badge-secondary">{cart.length}</div>
+            </Link>
+        </li>
 
     </>;
 
