@@ -21,7 +21,7 @@ const Navbar = () => {
                     timer: 1500
                 });
             })
-            .catch( error => {
+            .catch(error => {
                 Swal.fire({
                     position: "top-end",
                     icon: "error",
@@ -47,9 +47,9 @@ const Navbar = () => {
         }
 
         <li>
-            <Link to="">
-                    <FaCartShopping className="text-2xl"/>
-                    <div className="badge badge-secondary">{cart.length}</div>
+            <Link to="/dashboard/cart">
+                <FaCartShopping className="text-2xl" />
+                <div className="badge badge-secondary">{cart.length}</div>
             </Link>
         </li>
 
@@ -74,7 +74,7 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Button</a>
+                <p className="btn">{user.email}</p>
             </div>
         </div>
 
