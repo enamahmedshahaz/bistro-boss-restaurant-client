@@ -20,8 +20,10 @@ const Login = () => {
     const { signInUser } = useContext(AuthContext);
 
     const location = useLocation();
-    // console.log('Location in login: ', location);
     const navigate = useNavigate();
+
+    const from = location.state?.from?.pathname || "/";
+    console.log('state in the login page:', location.state);
 
 
     useEffect(() => {
@@ -46,9 +48,10 @@ const Login = () => {
 
                 //if comes from a private route navigate to that route, 
                 // else navigate to home page after successful login
-                navigate(location?.state ?
-                    location.state : '/'
-                );
+                // navigate(location?.state ?
+                //     location.state : '/'
+                // );
+                navigate(from);
 
                 Swal.fire({
                     position: "top-end",
@@ -137,7 +140,8 @@ const Login = () => {
                             </div>
 
                             <div className="form-control mt-6">
-                                <input disabled={disabled} className="btn btn-primary" type="submit" value="Sign In" />
+                                {/* Todo: re-apply disable */}
+                                <input disabled={false} className="btn btn-primary" type="submit" value="Sign In" />
                             </div>
                         </form>
 

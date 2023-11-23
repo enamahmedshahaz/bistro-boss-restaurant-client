@@ -1,18 +1,43 @@
 import useAuth from "../../hooks/useAuth";
 import Swal from 'sweetalert2';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const FoodCard = ({ item }) => {
 
-    const { name, image, price, recipe } = item;
+    const { name, image, price, recipe, _id } = item;
 
     const { user } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const axiosSecure = useAxiosSecure();
 
     const handleAddToCart = (food) => {
-        if(user && user.email){
-            //TODO: save to cart
-        }else{
+
+        if (user && user.email) {
+            const cartItem = {
+                menuId: _id,
+                email: user.email,
+                name,
+                image,
+                price
+            };
+
+            axiosSecure.post('/carts', cartItem)
+                .then(res => {
+                    if (res.data.insertedId) {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: `${name} is added to cart!`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                })
+                .catch(error => console.log(error));
+
+        } else {
             Swal.fire({
                 title: "Can't add to cart?",
                 text: "You need to login to add to cart!",
@@ -21,11 +46,11 @@ const FoodCard = ({ item }) => {
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, Login now!"
-              }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
-                    navigate("/login");
+                    navigate("/login", { state: { from: location } });
                 }
-              });
+            });
         }
     }
 
