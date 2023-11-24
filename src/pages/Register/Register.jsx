@@ -6,13 +6,12 @@ import { Helmet } from "react-helmet-async";
 import { useContext } from "react";
 import { AuthContext } from '../../providers/AuthProvider';
 import Swal from 'sweetalert2';
-
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
-
     const { createUser, updateUserProfile } = useContext(AuthContext);
-
     const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
 
     const {
         register,
@@ -30,20 +29,35 @@ const Register = () => {
                 console.log(loggedOnUser);
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
-                        console.log('Profile update successful');
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: "Profile Registration successful",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        navigate("/");
+                        //save user data to database
+                        const user = {
+                            name: data.name,
+                            email: data.email,
+                        };
+                        axiosPublic.post('/users', user)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    // clear all input values in the form
+                                    // e.target.reset();
+                                    Swal.fire({
+                                        position: "top-end",
+                                        icon: "success",
+                                        title: "User Registration successful",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    navigate("/");
+                                }
+                            }).catch(error => {
+                                Swal.fire({
+                                    title: "Registration failed!",
+                                    text: `Error: ${error.message}`,
+                                    icon: "error"
+                                });
+                            })
                     }).catch((error) => {
                         console.error(error);
                     });
-                // clear all input values in the form
-                // e.target.reset();
             })
             .catch(error => {
                 console.error(error);

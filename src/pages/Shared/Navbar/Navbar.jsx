@@ -74,7 +74,10 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <p className="btn">{user.email}</p>
+               {
+                 user && 
+                 <p className="btn">{user?.email}</p>
+               }
             </div>
         </div>
 
