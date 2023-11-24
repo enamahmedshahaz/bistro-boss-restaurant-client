@@ -55,6 +55,45 @@ const AllUsers = () => {
         });
     }
 
+    const handleMakeAdmin = (user) => {
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Make this user as admin??",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Make Admin!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.patch(`/users/admin/${user._id}`)
+                    .then(response => {
+                        console.log(response.data);
+                        if (response.data.modifiedCount) {
+                            Swal.fire({
+                                title: "Done!",
+                                text: "User is now Admin!",
+                                icon: "success"
+                            });
+                            refetch(); //refetch carts data
+                        }
+                    })
+                    .catch(error => {
+                        //  console.log(error);
+                        Swal.fire({
+                            title: "Can't set Admin role!",
+                            text: `Error occurred: ${error.message}`,
+                            icon: "error"
+                        });
+                    })
+            }
+        });
+    }
+
+
+
+
     return (
         <div>
             <SectionTitle
@@ -94,7 +133,7 @@ const AllUsers = () => {
                                     {user.email}
                                 </td>
                                 <td>
-                                    <button className="btn btn-warning">
+                                    <button onClick={() => handleMakeAdmin(user)} className="btn btn-warning">
                                         <FaUsers className="text-xl"></FaUsers>
                                     </button>
                                 </td>
