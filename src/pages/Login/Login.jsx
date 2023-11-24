@@ -11,19 +11,20 @@ import { Helmet } from 'react-helmet-async';
 import { AuthContext } from '../../providers/AuthProvider';
 
 import Swal from 'sweetalert2';
+import SocialLogin from '../../components/SocialLogin/SocialLogin';
 
 const Login = () => {
 
     // const captchaRef = useRef();
     const [disabled, setDisabled] = useState(true);
 
-    const { signInUser } = useContext(AuthContext);
+    const { signInUser} = useContext(AuthContext);
 
     const location = useLocation();
     const navigate = useNavigate();
 
     const from = location.state?.from?.pathname || "/";
-    console.log('state in the login page:', location.state);
+    // console.log('state in the login page:', location.state);
 
 
     useEffect(() => {
@@ -63,7 +64,7 @@ const Login = () => {
 
             })
             .catch(error => {
-                console.log(error);
+                //   console.log(error);
                 Swal.fire({
                     position: "top-end",
                     icon: "error",
@@ -71,7 +72,6 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-
             })
     }
 
@@ -144,9 +144,13 @@ const Login = () => {
                                 <input disabled={false} className="btn btn-primary" type="submit" value="Sign In" />
                             </div>
                         </form>
-
-                        <div className="card-body text-center -mt-10">
+                        <div className="card-body text-center -mt-14">
                             <p>New Here? Please  <Link className='font-bold text-blue-700' to="/register">Register</Link> </p>
+                        </div>
+                        
+                        <div className='mb-5 -mt-5'>
+                            <div className='divider'>Or Login with</div>
+                            <SocialLogin></SocialLogin>
                         </div>
 
                     </div>

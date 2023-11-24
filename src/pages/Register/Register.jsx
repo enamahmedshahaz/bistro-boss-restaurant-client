@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { AuthContext } from '../../providers/AuthProvider';
 import Swal from 'sweetalert2';
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const Register = () => {
     const { createUser, updateUserProfile } = useContext(AuthContext);
@@ -166,8 +167,13 @@ const Register = () => {
                             </div>
                         </form>
 
-                        <div className="card-body text-center -mt-10">
+                        <div className="card-body text-center -mt-14">
                             <p>Already have account? Please  <Link className='font-bold text-blue-700' to="/login">Login</Link> </p>
+                        </div>
+
+                        <div className='mb-5 -mt-5'>
+                            <div className='divider'>Or Sign up with</div>
+                            <SocialLogin></SocialLogin>
                         </div>
 
                     </div>
