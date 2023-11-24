@@ -73,10 +73,10 @@ const AllUsers = () => {
                         if (response.data.modifiedCount) {
                             Swal.fire({
                                 title: "Done!",
-                                text: "User is now Admin!",
+                                text: `${user.name} is now Admin!`,
                                 icon: "success"
                             });
-                            refetch(); //refetch carts data
+                            refetch(); //refetch users data
                         }
                     })
                     .catch(error => {
@@ -133,9 +133,12 @@ const AllUsers = () => {
                                     {user.email}
                                 </td>
                                 <td>
-                                    <button onClick={() => handleMakeAdmin(user)} className="btn btn-warning">
-                                        <FaUsers className="text-xl"></FaUsers>
-                                    </button>
+                                    {
+                                        user.role === 'admin' ? 'Admin'
+                                            : <button onClick={() => handleMakeAdmin(user)} className="btn btn-warning">
+                                                <FaUsers className="text-xl"></FaUsers>
+                                            </button>
+                                    }
                                 </td>
                                 <th>
                                     <button onClick={() => handleDeleteUser(user)} className="btn btn-error">

@@ -13,6 +13,7 @@ import {
 } from "firebase/auth";
 
 import auth from "../firebase/firebase.config";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 export const AuthContext = createContext(null);
 
@@ -24,17 +25,36 @@ const AuthProvider = ({ children }) => {
 
     const [loading, setLoading] = useState(true);
 
+    const axiosPublic = useAxiosPublic();
+
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-            // console.log('Current User value: ', currentUser);
             setUser(currentUser);
+
+            //------------START: jwt related code ---------
+            //just when there is a user: send userinfo to server, receive
+            // jwt token created from server, save the token into client side.
+            if (currentUser) {
+                //get token and store on client side(1. local storage, 2. cookie, caching )
+                const userInfo = { email: currentUser.email };
+                axiosPublic.post("/jwt", userInfo).then((response) => {
+                    if (response.data.token) {
+                        localStorage.setItem("access-token", response.data.token);
+                    }
+                });
+            } else {
+                //when there is no user, remove the saved jwt token
+                localStorage.removeItem("access-token");
+            }
+            //------------END: jwt related code ---------
+
             setLoading(false);
         });
-        return (() => {
+        return () => {
             unSubscribe();
-        });
-
+        };
     }, []);
+
 
     const createUser = (email, password) => {
         setLoading(true);
