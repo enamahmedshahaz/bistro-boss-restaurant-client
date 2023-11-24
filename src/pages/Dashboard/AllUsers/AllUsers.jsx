@@ -3,7 +3,8 @@ import {
     useQuery
 } from '@tanstack/react-query'
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { FaTrashCan } from "react-icons/fa6";
+import { FaTrashCan, FaUsers } from "react-icons/fa6";
+import Swal from "sweetalert2";
 
 
 const AllUsers = () => {
@@ -18,12 +19,41 @@ const AllUsers = () => {
         },
     });
 
-    const handleDelete = (id) => {
+    const handleDeleteUser = (user) => {
 
-        console.log('Delete user id: ', id);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.delete(`/users/${user._id}`)
+                    .then(response => {
+                        // console.log(response.data);
+                        if (response.data.deletedCount) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "User has been deleted!",
+                                icon: "success"
+                            });
+                            refetch(); //refetch carts data
+                        }
+                    })
+                    .catch(error => {
+                        //  console.log(error);
+                        Swal.fire({
+                            title: "Can't Delete!",
+                            text: `Error occurred: ${error.message}`,
+                            icon: "error"
+                        });
+                    })
+            }
+        });
     }
-
-
 
     return (
         <div>
@@ -40,7 +70,7 @@ const AllUsers = () => {
 
             <div>
                 <div className="overflow-x-auto">
-                    <table className="table">
+                    <table className="table table-zebra">
                         <thead>
                             <tr className="uppercase">
                                 <th>
@@ -64,11 +94,13 @@ const AllUsers = () => {
                                     {user.email}
                                 </td>
                                 <td>
-                                    Role
+                                    <button className="btn btn-warning">
+                                        <FaUsers className="text-xl"></FaUsers>
+                                    </button>
                                 </td>
                                 <th>
-                                    <button onClick={() => handleDelete(user._id)} className="btn btn-error">
-                                        <FaTrashCan></FaTrashCan>
+                                    <button onClick={() => handleDeleteUser(user)} className="btn btn-error">
+                                        <FaTrashCan className="text-xl"></FaTrashCan>
                                     </button>
                                 </th>
                             </tr>)}
@@ -77,10 +109,7 @@ const AllUsers = () => {
                     </table>
                 </div>
             </div>
-
         </div>
-
-
     );
 };
 
