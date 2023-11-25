@@ -2,6 +2,9 @@ import { FaUtensils } from "react-icons/fa6";
 import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -11,9 +14,10 @@ const AddItems = () => {
     const { register, handleSubmit, reset } = useForm();
 
     const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
     const onSubmit = async (data) => {
-        console.log(data);
+        console.log('form data: ', data);
         //image upload to imagebb and get an url
         const imageFile = { image: data.image[0] };
         const res = await axiosPublic.post(image_hosting_api, imageFile, {
@@ -22,15 +26,41 @@ const AddItems = () => {
             }
         });
 
-        console.log(res.data);
+        // console.log('response from image bb: ', res.data);
+
         if (res.data.success) {
             //now send the item data to the server with image url 
-            
+            const menuItem = {
+                name: data.name,
+                recipe: data.recipe,
+                image: res.data.data.display_url,
+                category: data.category,
+                price: parseFloat(data.price)
+            }
+
+            const menuRes = await axiosSecure.post('/menu', menuItem);
+            //  console.log('response after saving menu item :', menuRes.data);
+            if (menuRes.data.insertedId) {
+                // show success popup
+                reset();
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: `${data.name} is added to the menu.`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
         }
     }
 
     return (
         <div>
+
+            <Helmet>
+                <title>Bistro Boss | Add Items</title>
+            </Helmet>
+
             <SectionTitle heading="add an item" subHeading="What's new?" ></SectionTitle>
             <div>
                 <form onSubmit={handleSubmit(onSubmit)}>
