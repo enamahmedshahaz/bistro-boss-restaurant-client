@@ -26,7 +26,7 @@ const Cart = () => {
                 axiosSecure.delete(`/carts/${id}`)
                     .then(response => {
                         // console.log(response.data);
-                        if (response.data.deletedCount) {
+                        if (response.data.deletedCount > 0) {
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Item has been deleted!",
@@ -43,7 +43,7 @@ const Cart = () => {
                             text: `Error occurred: ${error.message}`,
                             icon: "error"
                         });
-                    })
+                    });
             }
         });
     }
