@@ -6,6 +6,7 @@ import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
 
 
 const ManageItems = () => {
@@ -105,9 +106,11 @@ const ManageItems = () => {
                                         </td>
                                         <td>{item.price}</td>
                                         <th>
-                                            <button onClick={() => handleUpdateItem(item)} className="btn btn-warning">
-                                                <FaRegEdit></FaRegEdit>
-                                            </button>
+                                            <Link to={`/dashboard/updateItems/${item._id}`}>
+                                                <button className="btn btn-warning">
+                                                    <FaRegEdit></FaRegEdit>
+                                                </button>
+                                            </Link>
                                         </th>
                                         <th>
                                             <button onClick={() => handleDeleteItem(item)} className="btn btn-error">
